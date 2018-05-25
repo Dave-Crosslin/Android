@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">JsonSender</string>
+    <string name="btn">Button</string>
+    <string name="textview">TextView</string>
+</resources>
