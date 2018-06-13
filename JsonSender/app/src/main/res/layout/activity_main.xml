@@ -7,24 +7,15 @@
     tools:context=".MainActivity">
 
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="175dp"
-        android:text="@string/btn"
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="227dp"
+        android:layout_height="32dp"
+        android:layout_marginEnd="56dp"
+        android:layout_marginRight="56dp"
+        android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteY="77dp" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="78dp"
-        android:text="@string/textview"
-        app:layout_constraintStart_toStartOf="@+id/button"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
 </android.support.constraint.ConstraintLayout>

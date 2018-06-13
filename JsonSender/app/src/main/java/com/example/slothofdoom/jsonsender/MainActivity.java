@@ -5,7 +5,10 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -20,12 +23,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.android.volley.Request.Method.GET;
 import static com.android.volley.Request.Method.POST;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     private Context mContext;
-    private String mUrlString = "https://localhost:8080/TestService/HomeController/ReturnJson/";
+    private String mUrlString = "http://192.168.0.13:8081/Home/Json";
     private Activity mActivity;
 
     @Override
@@ -36,47 +42,60 @@ public class MainActivity extends AppCompatActivity {
         mContext = getApplicationContext();
         mActivity = MainActivity.this;
 
-        Button button = findViewById(R.id.button);
-        final TextView textView = findViewById(R.id.textView);
+       // Button button = findViewById(R.id.button);
+       // final TextView textView = findViewById(R.id.textView);
+        final Spinner spinner = findViewById(R.id.spinner);
+        spinner.setOnItemSelectedListener(this);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                textView.setText("");
+      final List<String> spinnerNames = new ArrayList<String>();
+                spinnerNames.add("hello");
+               // textView.setText("");
 
-
-                String str = "SELECT name FROM Teams";
-                JSONObject query = new JSONObject();
-                try {
-                    query.put(str, "SELECT name FROM Teams");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                JsonObjectRequest jsonObjReq = new JsonObjectRequest(
-                        Request.Method.POST,
+               JsonArrayRequest jsonArrReq = new JsonArrayRequest(
+                        Request.Method.GET,
                         mUrlString,
-                        query,
-                        new Response.Listener<JSONObject>() {
+                        null,
+                        new Response.Listener<JSONArray>() {
                             @Override
-                            public void onResponse(JSONObject response) {
-                                textView.setText(response.toString());
+                            public void onResponse(JSONArray response) {
+                               for(int i = 0; i < response.length(); i++) {
+                                   try {
+                                     // String str = response.getString(i);
+                                       spinnerNames.add(response.getString(i));
+
+                                   } catch (JSONException e) {
+                                       e.printStackTrace();
+                                   }
+                               }
+
                             }
 
                          },
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-                                // Do something when get error
-                                textView.setText("Error");
+
+                               spinnerNames.add(error.toString());
                             }
                         }
                 );
 
-                MySingleton.getInstance(mContext).addToRequestQueue(jsonObjReq);
+                MySingleton.getInstance(mContext).addToRequestQueue(jsonArrReq);
 
-            }
-        });
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerNames);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(dataAdapter);
+
+
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
 
     }
 }
