@@ -1,5 +1,4 @@
 package com.example.slothofdoom.jsonsender;
-
 import android.app.Activity;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
@@ -10,7 +9,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -18,14 +16,11 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static com.android.volley.Request.Method.GET;
 import static com.android.volley.Request.Method.POST;
 
@@ -38,19 +33,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         mContext = getApplicationContext();
         mActivity = MainActivity.this;
-
-       // Button button = findViewById(R.id.button);
-       // final TextView textView = findViewById(R.id.textView);
         final Spinner spinner = findViewById(R.id.spinner);
         spinner.setOnItemSelectedListener(this);
-
-      final List<String> spinnerNames = new ArrayList<String>();
+        final List<String> spinnerNames = new ArrayList<String>();
                 spinnerNames.add("hello");
-               // textView.setText("");
-
                JsonArrayRequest jsonArrReq = new JsonArrayRequest(
                         Request.Method.GET,
                         mUrlString,
@@ -60,33 +48,25 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             public void onResponse(JSONArray response) {
                                for(int i = 0; i < response.length(); i++) {
                                    try {
-                                     // String str = response.getString(i);
                                        spinnerNames.add(response.getString(i));
-
                                    } catch (JSONException e) {
                                        e.printStackTrace();
                                    }
                                }
-
                             }
-
                          },
                         new Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-
                                spinnerNames.add(error.toString());
                             }
                         }
                 );
 
-                MySingleton.getInstance(mContext).addToRequestQueue(jsonArrReq);
-
+        RequestHandler.getInstance(mContext).addToRequestQueue(jsonArrReq);
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerNames);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
-
-
     }
 
     @Override
